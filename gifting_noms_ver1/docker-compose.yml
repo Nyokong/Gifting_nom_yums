@@ -1,0 +1,26 @@
+
+services:
+  # app:
+  #   build: .
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - db
+  #   # environment:
+  #   #   - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your-publishable-key
+
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=callmekay
+      - POSTGRES_PASSWORD=callmekay
+      - POSTGRES_DB=gifting_noms
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
