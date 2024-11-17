@@ -8,7 +8,7 @@ export default function signupform() {
 
   return (
     <div>
-      <form>
+      <form className="w-[300px] h-[auto] flex flex-col justify-between">
         <input type="text" name="name" id="inp_text" />
         {state?.errors?.name && <p>{state.errors.name}</p>}
         <input type="email" name="email" id="inp_email" />
