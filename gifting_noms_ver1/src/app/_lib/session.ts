@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 
 const key = new TextEncoder().encode(process.env.SECRET);
 
+// creating a cookie
 const cookie = {
   name: 'session',
   options: { httponly: true, secure: true, sameSite: 'lax', path: '/'},
