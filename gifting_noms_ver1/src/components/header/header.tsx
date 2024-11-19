@@ -2,6 +2,7 @@
 
 // next navigation
 import { useRouter } from "next/navigation";
+import '@/app/styles/globals.scss';
 
 export default function header() {
   const router = useRouter();
@@ -13,8 +14,12 @@ export default function header() {
     <div className="w-full h-[100px] items-center bg-black text-white flex flex-row justify-between">
       <h1 className="h-full flex items-center">Gifting Nom Yums</h1>
       <div className="flex flex-row w-[300px] h-full items-center justify-evenly">
-        <button onClick={() => goToPage("/dashboard")}>dashboard</button>
-        <button onClick={() => goToPage("/auth/login")}>Login</button>
+        <button className="button" onClick={() => goToPage('/dashboard')}>
+          dashboard
+        </button>
+        <button className="button" onClick={() => goToPage('/auth/login')}>
+          Login
+        </button>
       </div>
     </div>
   );

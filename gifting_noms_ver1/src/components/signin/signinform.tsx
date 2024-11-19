@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
+import '@/app/styles/globals.scss';
+
+import { useState } from 'react';
+import { Input } from '@/components/ui/input';
 import { redirect } from 'next/dist/server/api-utils';
 import { useRouter } from 'next/navigation';
 import api from '@/app/_lib/axios';
-
 
 export default function SigninForm() {
   const [email, setEmail] = useState('');
@@ -49,7 +50,10 @@ export default function SigninForm() {
   };
 
   return (
-    <form className="w-[300px] h-[auto] flex flex-col " onSubmit={handleSubmit}>
+    <form
+      className="w-[300px] h-[auto] flex flex-col justify-center items-center div-container"
+      onSubmit={handleSubmit}
+    >
       <Input
         name="email"
         type="email"
@@ -69,7 +73,7 @@ export default function SigninForm() {
       />
       {errors.password && <p>{errors.password}</p>}
 
-      <button type="submit" disabled={pending}>
+      <button className="button" type="submit" disabled={pending}>
         {pending ? 'Submitting...' : 'Sign In'}
       </button>
       {success && <p>{success}</p>}

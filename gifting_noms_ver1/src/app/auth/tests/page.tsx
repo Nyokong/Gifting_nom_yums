@@ -1,5 +1,7 @@
 'use client';
 
+import '@/app/styles/globals.scss';
+
 import api from '@/app/_lib/axios';
 import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
@@ -65,11 +67,11 @@ export default function page() {
           name="email"
           type="email"
           placeholder="Enter your email"
-          className="m-2 p-3 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="input"
           value={email}
           onChange={e => setEmail(e.target.value)}
         />
-        <button type="submit" disabled={pending}>
+        <button className="button" type="submit" disabled={pending}>
           {pending ? 'Processing...' : 'Submit'}
         </button>
       </form>

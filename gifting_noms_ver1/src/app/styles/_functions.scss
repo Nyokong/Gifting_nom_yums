@@ -1,0 +1,15 @@
+// app/styles/_functions.scss
+@function calculate-rem($size) {
+    $rem-size: $size / 16px;
+    @return #{$rem-size}rem;
+  }
+  
+  @function color-contrast($color) {
+    $luminance: (
+      red($color) * 0.299 +
+      green($color) * 0.587 +
+      blue($color) * 0.114
+    ) / 255;
+    
+    @return if($luminance > 0.5, #000000, #ffffff);
+  }

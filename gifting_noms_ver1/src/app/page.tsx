@@ -1,5 +1,6 @@
 "use client";
 
+import '@/app/styles/globals.scss';
 import Header from "@/components/header/header";
 
 // next navigation
