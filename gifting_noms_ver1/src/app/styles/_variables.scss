@@ -1,7 +1,13 @@
 // app/styles/_variables.scss
-$primary-color: #007bff;
-$secondary-color: #6c757d;
 $spacing-unit: 8px;
+
+// Variables for consistent theming
+$primary-color: #e4e4e4;
+$secondary-color: #6b7280;
+$background-color: #f7fafc;
+$border-color: #e2e8f0;
+$border-radius: 4px;
+$spacing-unit: 16px;
 
 // Breakpoints
 $mobile: 576px;

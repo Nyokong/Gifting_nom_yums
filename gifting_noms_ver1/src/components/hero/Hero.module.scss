@@ -1,0 +1,40 @@
+.hero {
+    text-align: center;
+    padding: 3rem 2rem;
+    background-color: #fffb84;
+  
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #333;
+    }
+  
+    .search {
+      display: inline-flex;
+      border: 2px solid #000;
+      border-radius: 5px;
+      overflow: hidden;
+  
+      input {
+        padding: 0.75rem;
+        font-size: 1rem;
+        border: none;
+        outline: none;
+        flex: 1;
+      }
+  
+      button {
+        background-color: #000;
+        color: #fff;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border: none;
+        cursor: pointer;
+  
+        &:hover {
+          background-color: #333;
+        }
+      }
+    }
+  }
+  

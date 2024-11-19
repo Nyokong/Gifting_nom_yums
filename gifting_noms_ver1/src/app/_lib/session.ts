@@ -1,42 +1,54 @@
+import 'server-only';
 import { JWTPayload, SignJWT, jwtVerify } from 'jose';
-import { redirect } from 'next/dist/server/api-utils';
+
 import { cookies } from 'next/headers';
+import { setCookie } from 'cookies-next';
 
 const key = new TextEncoder().encode(process.env.SECRET);
 
-// creating a cookie
-const cookie = {
-  name: 'session',
-  options: { httponly: true, secure: true, sameSite: 'lax', path: '/'},
-  duration: 24 * 60 * 60 * 1000,
+type SessionPayLoad = {
+    userId: string;
+    expiresAt: Date;
+};
+
+export async function encrypt(payload: SessionPayLoad) {
+    return new SignJWT(payload)
+        .setProtectedHeader({ alg: 'HS256' })
+        .setIssuedAt()
+        .setExpirationTime('1day')
+        .sign(key);
 }
 
-export async function encrypt(payload: JWTPayload | undefined) {
-  return new SignJWT(payload).setProtectedHeader({alg: 'HS256'}).setIssuedAt().setExpirationTime('1day').sign(key)
+export async function decrypt(session: string | Uint8Array) {
+    try {
+        const { payload } = await jwtVerify(session, key, {
+            algorithms: ['HS256'],
+        });
+
+        return payload;
+    } catch (error) {
+        console.log('failed to verify session');
+        return null;
+    }
 }
 
-export async function decrypt(session: string | Uint8Array){
-  try{
-    const { payload } = await jwtVerify(session, key, {
-      algorithms: ['HS256'],
-    })
+export async function createSession(userId: string) {
+    const expiresAt = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
+    const session = await encrypt({ userId, expiresAt });
 
-    return payload;
-  }catch (error){
-    return null;
-  }
-}
+    const sessionCookie = await cookies();
 
-export async function createSession(userId: any){
-  const expires = new Date(Date.now() + cookie.duration);
-  const session = await encrypt({userId, expires});
-
-  if(session){
-    console.log('cookie has been created')
-  }
-
-  // cookies().set(cookie.name, session, {...cookie.options, expires })
-  // redirect('/dashboard');
+    if (session) {
+        console.log('session has been created: ', session);
+        // setCookie('session', session, { maxAge: 60 * 60 * 1 });
+        sessionCookie.set({
+            name: 'session',
+            value: session,
+            httpOnly: true,
+            secure: true,
+            maxAge: 60 * 60 * 1,
+        });
+    }
 }
 
 // export async function verifySession(){

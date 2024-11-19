@@ -1,82 +1,97 @@
 "use client";
 
-import '@/app/styles/globals.scss';
-
-import { useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
-import { redirect } from 'next/dist/server/api-utils';
 import { useRouter } from 'next/navigation';
-import api from '@/app/_lib/axios';
+// import api from '@/app/_lib/axios';
+import { login } from './actions';
 
 export default function SigninForm() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [success, setSuccess] = useState('');
-  const [errors, setErrors] = useState({ email: '', password: '' });
-  const [pending, setPending] = useState(false);
+    const [state, loginAction] = useActionState(login, undefined);
 
-  const router = useRouter();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [pending, setPending] = useState(false);
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    setPending(true);
+    const router = useRouter();
 
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+    const [isClient, setIsClient] = useState(false);
 
-    console.log(`email ${email}`);
+    useEffect(() => {
+        setIsClient(true);
 
-    try {
-      const response = await api.post('/api/auth/login', {
-        email,
-        password,
-      });
+        // If state contains user, perform client-side redirection
+        if (state?.user && state.redirect) {
+            router.push('/');
+            // Redirect on successful login
+        }
+        // Handle errors if they exist in state
+        if (state?.errors) {
+            setErrors(state.errors);
+            setPending(false);
+        }
+    }, [state, router]);
 
-      const data = response.data;
-      setPending(false);
+    // const handleSubmit = async (e: any) => {
+    //     e.preventDefault();
+    //     setPending(true);
 
-      if (data.errors) {
-        setErrors(data.errors);
-      } else {
-        // Handle successful sign-in (e.g., redirect)
-        // redirect.push("/");
-        setSuccess('Login successful!');
-      }
-    } catch (error) {
-      // console.error('Error logging in:', error);
-      // setErrors(error);
-      setPending(false);
-    }
-  };
+    //     const formData = new FormData();
+    //     formData.append('email', email);
+    //     formData.append('password', password);
 
-  return (
-    <form
-      className="w-[300px] h-[auto] flex flex-col justify-center items-center div-container"
-      onSubmit={handleSubmit}
-    >
-      <Input
-        name="email"
-        type="email"
-        placeholder="Enter your email"
-        className="m-2 p-3 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-      />
-      {errors.email && <p>{errors.email}</p>}
-      <Input
-        name="password"
-        type="password"
-        placeholder="Enter your password"
-        className="m-2 p-3 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      {errors.password && <p>{errors.password}</p>}
+    //     // try {
+    //     //     const response = await loginAction({},formData);
+    //     //     if (response.user) {
+    //     //         console.log('User ID:', response.user.id);
+    //     //         setPending(false);
+    //     //         router.push('/');
+    //     //     } else if (response.errors) {
+    //     //         setPending(false);
+    //     //         console.error('Login errors:', response.errors);
+    //     //     }
+    //     // } catch (error) {
+    //     //     console.error('Error during login:', error);
+    //     //     setPending(false);
+    //     // }
+    // };
 
-      <button className="button" type="submit" disabled={pending}>
-        {pending ? 'Submitting...' : 'Sign In'}
-      </button>
-      {success && <p>{success}</p>}
-    </form>
-  );
+    return (
+        <>
+            {isClient ? (
+                <form
+                    action={loginAction}
+                    className="w-[300px] h-[auto] flex flex-col justify-center items-center div-container"
+                >
+                    <Input
+                        name="email"
+                        type="email"
+                        placeholder="Enter your email"
+                        className="m-2 p-3 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                    />
+                    {state?.errors?.email && <p>{state.errors.email}</p>}
+                    <Input
+                        name="password"
+                        type="password"
+                        placeholder="Enter your password"
+                        className="m-2 p-3 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                    />
+                    {state?.errors?.password && <p>{state.errors.password}</p>}
+                    <button className="button" type="submit" disabled={pending}>
+                        {pending ? 'Submitting...' : 'Sign In'}
+                    </button>
+                </form>
+            ) : (
+                <p>Loading...</p>
+            )}
+        </>
+    );
 }
+function setErrors(errors: any) {
+    throw new Error('Function not implemented.');
+}
+
