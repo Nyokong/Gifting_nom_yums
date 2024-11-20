@@ -33,36 +33,12 @@ export default function SigninForm() {
         }
     }, [state, router]);
 
-    // const handleSubmit = async (e: any) => {
-    //     e.preventDefault();
-    //     setPending(true);
-
-    //     const formData = new FormData();
-    //     formData.append('email', email);
-    //     formData.append('password', password);
-
-    //     // try {
-    //     //     const response = await loginAction({},formData);
-    //     //     if (response.user) {
-    //     //         console.log('User ID:', response.user.id);
-    //     //         setPending(false);
-    //     //         router.push('/');
-    //     //     } else if (response.errors) {
-    //     //         setPending(false);
-    //     //         console.error('Login errors:', response.errors);
-    //     //     }
-    //     // } catch (error) {
-    //     //     console.error('Error during login:', error);
-    //     //     setPending(false);
-    //     // }
-    // };
-
     return (
         <>
             {isClient ? (
                 <form
                     action={loginAction}
-                    className="w-[300px] h-[auto] flex flex-col justify-center items-center div-container"
+                    className="w-[300px] h-[auto] flex flex-col justify-center items-center"
                 >
                     <Input
                         name="email"
@@ -82,7 +58,11 @@ export default function SigninForm() {
                         onChange={e => setPassword(e.target.value)}
                     />
                     {state?.errors?.password && <p>{state.errors.password}</p>}
-                    <button className="button" type="submit" disabled={pending}>
+                    <button
+                        className="hov-button"
+                        type="submit"
+                        disabled={pending}
+                    >
                         {pending ? 'Submitting...' : 'Sign In'}
                     </button>
                 </form>

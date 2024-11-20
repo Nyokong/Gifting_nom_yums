@@ -8,8 +8,58 @@
   url('/fonts/ABCFavoritMono-Book.woff2') format('truetype'); 
   font-weight: normal; font-style: normal; 
 } 
+
+:root { 
+  --primary-color: #b16666; 
+  --secondary-color: #2ecc71; 
+  --font-size-large: 1.5rem; 
+  --spacing-unit: 16px; 
+  --button-text: #fff;
+  --button-hover: #000;
+  --button-border: #000;
+  --button-background: #bb7eca;
+
+  --border-color: #000;
+}
+
   
-body { font-family: 'ABCFavoritMono-Book', sans-serif; }
+/* ececec */
+body { 
+  font-family: 'ABCFavoritMono-Book', sans-serif; 
+  background-color: var(--primary-color);
+}
+
+.div-col-container{
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: var(--spacing-unit);
+}
+
+.div-row-container{
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.hov-button{
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  background-color: var(--button-background);
+  color: var(--button-text);
+  border: 2px solid var(--border-color);
+  transition: box-shadow 0.1s ease 0.1s;
+  height: 50px;
+  width: 120px;
+}
+
+.hov-button:hover{
+  box-shadow: 3px 3px 0px 0px var(--button-hover);
+}
 
 @layer utilities {
   .text-balance {

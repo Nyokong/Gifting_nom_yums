@@ -45,6 +45,7 @@ export async function login(_prevState: any, formData: FormData) {
             return { errors: data.errors };
         } else {
             const id = data.user.id;
+
             // Handle successful sign-in (e.g., redirect)
             console.log('user ID:', id);
             await createSession(id);

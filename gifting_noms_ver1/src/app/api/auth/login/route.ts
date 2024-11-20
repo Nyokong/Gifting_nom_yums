@@ -14,37 +14,6 @@ type ResponseData = {
   user?: any;
 };
 
-// export async function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse<ResponseData>,
-// ) {
-//   // Check if method is POST
-//   if (req.method !== 'POST') {
-//     return res.status(405).json({ error: 'Method not allowed' });
-//   }
-//   try {
-//     // For POST requests, the body is already parsed in Next.js
-//     const { email, password } = req.body;
-
-//     console.log('in the server side', email)
-
-//     // Validate input
-//     if (!email || !password) {
-//       return res.status(400).json({ error: 'Email and password are required' });
-//     }
-
-//     console.log(email);
-//     console.log(password);
-
-//     // Your login logic here (e.g., database queries, authentication)
-
-//     res.status(200).json({ message: 'Login successful' });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// }
-
 export async function POST(request: Request) {
   try {
     const body = await request.json()
