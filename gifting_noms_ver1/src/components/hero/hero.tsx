@@ -1,5 +1,4 @@
 import styles from './Hero.module.scss';
-import '@/app/styles/globals.scss';
 
 import React from 'react';
 

@@ -1,13 +1,11 @@
 "use client";
 
 // next navigation
-import { useRouter } from "next/navigation";
-import { signIn, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 import Link from 'next/link';
 import styles from './Header.module.scss';
 
-import '@/app/styles/globals.scss';
 import Headerlink from './headerlink';
 
 export default function header() {

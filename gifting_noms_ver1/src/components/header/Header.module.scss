@@ -1,5 +1,5 @@
 @use 'sass:math'; 
-@use '@/app/styles/variables';
+@use '../styles/variables';
 
 .header {
     display: flex;
