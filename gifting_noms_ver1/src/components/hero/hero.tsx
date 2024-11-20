@@ -1,14 +1,12 @@
-import styles from './Hero.module.scss';
-
 import React from 'react';
 
 export default function hero() {
     return (
-        <section className={styles.hero}>
+        <section>
             <div className="div-container">
                 <h1>Find your perfect Kota and Cake :{'>'}</h1>
             </div>
-            <div className={styles.search}>
+            <div>
                 <input
                     type="text"
                     placeholder="Search for NFTs, categories..."

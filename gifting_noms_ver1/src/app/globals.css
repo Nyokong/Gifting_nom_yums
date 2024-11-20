@@ -2,9 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
+@font-face { 
+  font-family: 'ABCFavoritMono-Book'; 
+  src: url('/fonts/ABCFavoritMono-Book.woff2') format('woff2'), 
+  url('/fonts/ABCFavoritMono-Book.woff2') format('truetype'); 
+  font-weight: normal; font-style: normal; 
+} 
+  
+body { font-family: 'ABCFavoritMono-Book', sans-serif; }
 
 @layer utilities {
   .text-balance {

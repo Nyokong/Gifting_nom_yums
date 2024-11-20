@@ -4,7 +4,6 @@
 import { useRouter } from 'next/navigation';
 
 import Link from 'next/link';
-import styles from './Header.module.scss';
 
 import Headerlink from './headerlink';
 
@@ -16,11 +15,11 @@ export default function header() {
     };
 
     return (
-        <header className={styles.header}>
-            <h1 className="h-full flex items-center">
+        <header>
+            <h1 className="h-full flex items-center div-container">
                 <Link href="/">Gifting Nom Yums</Link>
             </h1>
-            <div className={styles.logo}>
+            <div>
                 {/* w-full h-[100px] items-center bg-black text-white flex flex-row justify-between */}
             </div>
             <nav>
@@ -30,9 +29,6 @@ export default function header() {
                     </li>
                     <li>
                         <Link href="/">About</Link>
-                    </li>
-                    <li>
-                        <Link href="/">Login</Link>
                     </li>
                 </ul>
             </nav>
