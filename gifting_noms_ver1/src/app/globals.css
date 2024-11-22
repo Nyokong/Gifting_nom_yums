@@ -12,15 +12,20 @@
 }
 
 :root {
-    --primary-color: #dddddd;
-    --secondary-color: #2ecc71;
+    --primary-color: #cecece;
+    --secondary-color: #000000;
+    --tertiary-color: #978cd4;
+    --top-tertiary-color: #e6e6e6;
+
     --font-size-large: 1.5rem;
     --spacing-unit: 16px;
 
     --form-background: #b16666;
 
+    --hero-background: #c05b5b;
+
     --button-text: #fff;
-    --button-hover: #000;
+    --button-hover: #ffffff;
     --button-border: #000;
     --button-background: #bb7eca;
 
@@ -38,6 +43,68 @@ body {
     margin: 0; /* Remove default body margin */
 }
 
+.header-top-desk {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    height: 100px;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-bottom: var(--border-thickness) solid var(--border-color);
+}
+
+.home:hover {
+    color: var(--tertiary-color);
+}
+
+.links-container {
+    width: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.link-tag {
+    margin: 0px 10px;
+}
+
+.link-tag:hover {
+    color: var(--accent-foreground);
+}
+
+.cart-icon-container {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 5px;
+    justify-content: baseline;
+    margin: 0px 20px;
+    background-color: var(--button-background);
+    color: var(--button-text);
+    border: var(--border-thickness) solid var(--border-color);
+    padding: 0px 10px;
+}
+
+.cart-icon-container:hover {
+    box-shadow: 3px 3px 0px 0px var(--button-hover);
+}
+
+.cart-icon-container p {
+    margin: 0px 10px;
+}
+
+.div-border-separator {
+    width: 1px;
+    background-color: #000;
+    height: 100%;
+}
+
 .div-col-container {
     border: 1px solid var(--border-color);
     display: flex;
@@ -48,11 +115,14 @@ body {
 }
 
 .div-row-container {
-    border: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     flex-direction: row;
     margin: var(--margin-unit);
+}
+
+.div-row-container button {
+    margin: 0px 20px;
 }
 
 .hov-button {
@@ -64,7 +134,7 @@ body {
     color: var(--button-text);
     border: var(--border-thickness) solid var(--border-color);
     transition: box-shadow 0.1s ease 0.1s;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     height: 50px;
     width: 120px;
 }
@@ -124,6 +194,14 @@ body {
 
 .form-col-container input {
     background-color: var(--primary-color);
+}
+
+.hero-component {
+    width: 100%;
+    background-color: var(--hero-background);
+    height: 30vh;
+    display: flex;
+    flex-direction: row;
 }
 
 @layer utilities {

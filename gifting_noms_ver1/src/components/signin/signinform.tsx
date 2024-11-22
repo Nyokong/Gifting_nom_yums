@@ -6,9 +6,10 @@ import { useRouter } from 'next/navigation';
 // import api from '@/app/_lib/axios';
 
 import { login } from './actions';
+import Loading from '@/app/loading';
 
 export default function SigninForm() {
-    const [state, loginAction] = useActionState(login, undefined);
+    const [state, loginAction, isLoading] = useActionState(login, undefined);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -21,24 +22,6 @@ export default function SigninForm() {
 
     useEffect(() => {
         setIsClient(true);
-
-        // // If state contains user, perform client-side redirection
-        // if (state?.user && state.redirect) {
-        //     console.log('client side errors:', state?.errors);
-        //     setPending(false);
-        //     router.push('/');
-        // }
-        // if (state?.redirect) {
-        //     console.log('client side errors:', state.errors);
-        //     router.push('/');
-        // }
-        // // Handle errors if they exist in state
-        // if (state?.errors) {
-        //     console.log('client side errors:', state.errors);
-        //     // setErrors(state.errors.message);
-        //     setPending(false);
-        //     // router.push('/');
-        // }
     }, []);
 
     const handleSubmit = (event: any) => {
@@ -109,10 +92,10 @@ export default function SigninForm() {
                         <button
                             className="hov-button"
                             type="submit"
-                            disabled={pending}
+                            disabled={isLoading}
                             // onClick={handleSubmit}
                         >
-                            {pending ? 'Submitting...' : 'Sign In'}
+                            {isLoading ? <Loading /> : 'Sign In'}
                         </button>
                     </form>
                 </div>

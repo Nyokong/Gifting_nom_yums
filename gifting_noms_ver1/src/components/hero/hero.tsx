@@ -2,16 +2,17 @@ import React from 'react';
 
 export default function hero() {
     return (
-        <section>
+        <section className="hero-component">
             <div className="div-container">
                 <h1>Find your perfect Kota and Cake :{'>'}</h1>
             </div>
-            <div>
+            <div className="div-row-container">
                 <input
                     type="text"
-                    placeholder="Search for NFTs, categories..."
+                    placeholder="Find what you're craving..."
+                    className="hov-input"
                 />
-                <button>Search</button>
+                <button className="hov-button">Search</button>
             </div>
         </section>
     );
