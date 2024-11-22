@@ -1,80 +1,80 @@
 'use client';
 
-import '@/app/styles/globals.scss';
-
 import api from '@/app/_lib/axios';
-import { useEffect, useState } from 'react';
-import { Input } from '@/components/ui/input';
+import Loading from '@/app/loading';
+import React, { useState, FormEvent, useActionState, useEffect } from 'react';
 
-export default function page() {
-  const [pending, setPending] = useState(false);
-  const [email, setEmail] = useState('');
+// import { useFormState } from 'react-dom';
+import { create } from './action';
 
-  // useEffect(() => {
-  //   setPending(false);
-  //   // setEmail('');
-  // }, []);
+const initialState = {
+    message: '',
+};
 
-  const handleGet = async (e: any) => {
-    // e.preventDefault();
-    setPending(true);
-    try {
-      const response = await api.get('/api/tests');
+export default function Page() {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
-      console.log(response.data);
+    const [state, formAction, isPending] = useActionState(create, initialState);
 
-      if (response.data) {
-        setPending(false);
-      }
-    } catch (error) {
-      // console.error(onmessage: 'error')
-      setPending(false);
-      console.log('error', error);
+    async function onSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        setIsLoading(true);
+        setError(null); // Clear previous errors when a new request starts
+
+        // const formData = new FormData(event.currentTarget);
+        // const formDataObject = Object.fromEntries(formData.entries());
     }
-  };
 
-  const handleSubmit = async (e: any) => {
-    // e.preventDefault();
-    setPending(true);
-    try {
-      const response = await api.post('/api/tests', {
-        email,
-      });
-
-      console.log(response.data);
-
-      if (response.data) {
-        setPending(false);
-      }
-    } catch (error) {
-      // console.error(onmessage: 'error')
-      setPending(false);
-      console.log('error', error);
-    }
-  };
-  return (
-    <div>
-      {/* <button onClick={handleSubmit}>click</button> */}
-      <button onClick={handleGet} disabled={pending}>
-        {pending ? 'Processing...' : 'Click'}
-      </button>
-
-      <form
-        className="w-[300px] h-[auto] flex flex-col "
-        onSubmit={handleSubmit}
-      >
-        <Input
-          name="email"
-          type="email"
-          placeholder="Enter your email"
-          className="input"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
-        <button className="button" type="submit" disabled={pending}>
-          {pending ? 'Processing...' : 'Submit'}
-        </button>
-      </form>
-    </div>
-  );
+    return (
+        <div>
+            {/* <div>
+                {error && <div style={{ color: 'red' }}>{error}</div>}
+                <form onSubmit={onSubmit} className="div-col-container">
+                    <input
+                        className="hov-input "
+                        type="text"
+                        name="name"
+                        placeholder="Enter your name"
+                    />
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        className="hov-button mt-3"
+                    >
+                        {isLoading ? <Loading /> : 'Submit'}
+                    </button>
+                </form>
+            </div> */}
+            <div className="mt-4 div-col-container">
+                {error && (
+                    <div className="alert-tab" style={{ color: 'blue' }}>
+                        {error}
+                    </div>
+                )}
+                <form
+                    // onSubmit={onSubmit}
+                    action={formAction}
+                    className="form-col-container"
+                >
+                    <h1 className="label-normal">Test Input</h1>
+                    <input
+                        className="hov-input "
+                        type="text"
+                        name="name"
+                        placeholder="Enter your name"
+                    />
+                    {state?.message && (
+                        <p className="mt-3 alert-tab">{state?.message}</p>
+                    )}
+                    {state?.errors?.name && (
+                        <p className="mt-2 alert-tab">{state.errors.name}</p>
+                    )}
+                    <button className="hov-button mt-4">
+                        {isPending ? <Loading /> : 'TestCreate'}
+                    </button>
+                </form>
+            </div>
+        </div>
+    );
 }

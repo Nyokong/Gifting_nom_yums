@@ -1,8 +1,9 @@
 import 'server-only';
 import { JWTPayload, SignJWT, jwtVerify } from 'jose';
 
+import { prisma } from '@/app/_lib/prisma';
+
 import { cookies } from 'next/headers';
-import { setCookie } from 'cookies-next';
 
 const key = new TextEncoder().encode(process.env.SECRET);
 
@@ -34,20 +35,34 @@ export async function decrypt(session: string | Uint8Array) {
 
 export async function createSession(userId: string) {
     const expiresAt = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
-    const session = await encrypt({ userId, expiresAt });
+    const sessionToken = await encrypt({ userId, expiresAt });
 
     const sessionCookie = await cookies();
 
-    if (session) {
-        console.log('session has been created: ', session);
-        // setCookie('session', session, { maxAge: 60 * 60 * 1 });
+    if (sessionToken) {
+        console.log('session has been created!');
         sessionCookie.set({
             name: 'session',
-            value: session,
+            value: sessionToken,
             httpOnly: true,
             secure: true,
             maxAge: 60 * 60 * 1,
         });
+
+        // creating the session database entry
+        try {
+            const admin = await prisma.session.create({
+                data: {
+                    sessionToken,
+                    userId,
+                    expires: expiresAt,
+                },
+            });
+            return admin;
+        } catch (error) {
+            console.error('Error creating admin:', error);
+            throw new Error('Failed to create admin user');
+        }
     }
 }
 

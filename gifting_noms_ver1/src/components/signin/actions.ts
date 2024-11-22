@@ -3,9 +3,6 @@
 import { z } from 'zod';
 import api from '@/app/_lib/axios';
 import { createSession } from '@/app/_lib/session';
-// import { redirect } from 'next/navigation';
-
-import { redirect } from 'next/dist/server/api-utils';
 
 const loginSchema = z.object({
     email: z.string().email({ message: 'Invalid Email Address' }).trim(),
@@ -21,7 +18,15 @@ export async function login(_prevState: any, formData: FormData) {
         Object.fromEntries(formData),
     );
 
+    if (validationResult.error) {
+        console.log('Ok progress');
+    }
+
     if (!validationResult.success) {
+        console.log(
+            'show me some errors:',
+            validationResult.error.flatten().fieldErrors,
+        );
         return {
             errors: validationResult.error.flatten().fieldErrors,
         };
@@ -38,33 +43,23 @@ export async function login(_prevState: any, formData: FormData) {
         });
 
         const data = response.data;
-        console.log('API response data:', data); // Add this log
 
-        if (data.errors) {
-            // Handle errors from the API response
-            return { errors: data.errors };
-        } else {
-            const id = data.user.id;
+        const id = data.user.id;
 
-            // Handle successful sign-in (e.g., redirect)
-            console.log('user ID:', id);
-            await createSession(id);
+        await createSession(id);
 
-            return { user: data.user, redirect: true };
-        }
+        return { user: data.user, redirect: true, errors: data.message };
     } catch (error: any) {
         if (error.response) {
             console.error('Error response:', error.response.data);
             console.error('Status code:', error.response.status);
-            console.error('Headers:', error.response.headers);
-        } else if (error.request) {
-            // The request was made but no response was received
-            console.error('No response received:', error.request);
-        } else {
-            // Something happened in setting up the request that triggered an Error
-            console.error('Error message:', error.message);
+            return {
+                errors: {
+                    message: error.response.data,
+                    status: error.response.status,
+                },
+            };
         }
-        console.error('Error config:', error.config);
     }
 }
 

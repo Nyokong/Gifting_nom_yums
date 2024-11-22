@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useActionState, useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
@@ -12,6 +12,7 @@ export default function SigninForm() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    // const [errors, setErrors] = useState('');
     const [pending, setPending] = useState(false);
 
     const router = useRouter();
@@ -21,58 +22,103 @@ export default function SigninForm() {
     useEffect(() => {
         setIsClient(true);
 
-        // If state contains user, perform client-side redirection
-        if (state?.user && state.redirect) {
-            router.push('/');
-            // Redirect on successful login
-        }
-        // Handle errors if they exist in state
-        if (state?.errors) {
-            setErrors(state.errors);
+        // // If state contains user, perform client-side redirection
+        // if (state?.user && state.redirect) {
+        //     console.log('client side errors:', state?.errors);
+        //     setPending(false);
+        //     router.push('/');
+        // }
+        // if (state?.redirect) {
+        //     console.log('client side errors:', state.errors);
+        //     router.push('/');
+        // }
+        // // Handle errors if they exist in state
+        // if (state?.errors) {
+        //     console.log('client side errors:', state.errors);
+        //     // setErrors(state.errors.message);
+        //     setPending(false);
+        //     // router.push('/');
+        // }
+    }, []);
+
+    const handleSubmit = (event: any) => {
+        // event.preventDefault();
+        setPending(true);
+
+        setTimeout(() => {
+            // Handle actual submission process here
             setPending(false);
-        }
-    }, [state, router]);
+        }, 7000);
+    };
+
+    // const form = event.target;
+    // const formData = new FormData(form);
+    // // Extract form data
+    // const email = formData.get('email');
+    // const password = formData.get('password');
+
+    // // Perform the login action and handle the response
+    // try {
+    //     const response = await loginAction({email, password}); // Assuming loginAction returns a promise
+    // // if (response.errors) {
+    // //     console.log('client side errors:', response.errors);
+    // //     // setErrors(response.errors.message);
+    // //     // Assuming errors have a message property
+    // //     }
+    // } catch (error) {
+    //     console.error('An error occurred during login:', error);
+    //     // setErrors('An unexpected error occurred.');
+    //     // Set a generic error message
+    //     }
+    //     finally { setPending(false); }
+    // };
+    // Simulate form submission process
 
     return (
         <>
             {isClient ? (
-                <form
-                    action={loginAction}
-                    className="w-[300px] h-[auto] flex flex-col justify-center items-center"
-                >
-                    <Input
-                        name="email"
-                        type="email"
-                        placeholder="Enter your email"
-                        className="m-2 p-3 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                    />
-                    {state?.errors?.email && <p>{state.errors.email}</p>}
-                    <Input
-                        name="password"
-                        type="password"
-                        placeholder="Enter your password"
-                        className="m-2 p-3 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-purple-500"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                    />
-                    {state?.errors?.password && <p>{state.errors.password}</p>}
-                    <button
-                        className="hov-button"
-                        type="submit"
-                        disabled={pending}
+                <div className="flex flex-col items-center gap-3 div-col-container">
+                    <form
+                        action={loginAction}
+                        className="form-col-container"
+                        onSubmit={handleSubmit}
                     >
-                        {pending ? 'Submitting...' : 'Sign In'}
-                    </button>
-                </form>
+                        <h1 className="">Login</h1>
+                        <Input
+                            name="email"
+                            type="email"
+                            placeholder="Enter your email"
+                            className="m-2 hov-input"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                        />
+                        {/* {errors && <p>{errors}</p>} */}
+                        {state?.errors?.email && <p>{state.errors.email}</p>}
+                        <Input
+                            name="password"
+                            type="password"
+                            placeholder="Enter your password"
+                            className="m-2 hov-input"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                        />
+
+                        {state?.errors?.password && (
+                            <p>{state.errors.password}</p>
+                        )}
+                        <button
+                            className="hov-button"
+                            type="submit"
+                            disabled={pending}
+                            // onClick={handleSubmit}
+                        >
+                            {pending ? 'Submitting...' : 'Sign In'}
+                        </button>
+                    </form>
+                </div>
             ) : (
                 <p>Loading...</p>
             )}
         </>
     );
 }
-function setErrors(errors: any) {
-    throw new Error('Function not implemented.');
-}
-

@@ -1,66 +1,66 @@
 'use server';
 
+// import { getServerSession } from 'next-auth';
+// import { authOptions } from '@/app/_lib/auth';
+
 import { NextResponse } from 'next/server';
 import { prisma } from '@/app/_lib/prisma';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/_lib/auth';
 import bcrypt from 'bcryptjs';
 
-import type { NextApiRequest, NextApiResponse } from 'next';
+// import type { NextApiRequest, NextApiResponse } from 'next';
 
 type ResponseData = {
-  message?: string;
-  error?: string;
-  user?: any;
+    message?: string;
+    error?: string;
+    user?: any;
 };
 
 export async function POST(request: Request) {
-  try {
-    const body = await request.json()
-    const { email, password } = body
+    try {
+        const body = await request.json();
+        const { email, password } = body;
 
-    if (!email || !password) {
-      return NextResponse.json(
-        { error: 'Email and password are required' },
-        { status: 400 }
-      )
+        if (!email || !password) {
+            return NextResponse.json(
+                { error: 'Email and password are required' },
+                { status: 400 },
+            );
+        }
+
+        const user = await prisma.user.findUnique({
+            where: { email },
+        });
+
+        if (!user) {
+            return NextResponse.json(
+                { error: 'Invalid credentials' },
+                { status: 401 },
+            );
+        }
+
+        const isValidPassword = await bcrypt.compare(password, user.password);
+
+        if (!isValidPassword) {
+            return NextResponse.json(
+                { error: 'Invalid credentials' },
+                { status: 401 },
+            );
+        }
+
+        return NextResponse.json({
+            message: 'Login successful',
+            user: {
+                id: user.id,
+                email: user.email,
+            },
+        });
+    } catch (error) {
+        // console.error('Login error:', error)
+        return NextResponse.json(
+            { error: 'Internal server error' },
+            { status: 500 },
+        );
     }
-
-    const user = await prisma.user.findUnique({
-      where: { email }
-    })
-
-    if (!user) {
-      return NextResponse.json(
-        { error: 'Invalid credentials' },
-        { status: 401 }
-      )
-    }
-
-    const isValidPassword = await bcrypt.compare(password, user.password)
-
-    if (!isValidPassword) {
-      return NextResponse.json(
-        { error: 'Invalid credentials' },
-        { status: 401 }
-      )
-    }
-
-    return NextResponse.json({
-      message: 'Login successful',
-      user: {
-        id: user.id,
-        email: user.email,
-      }
-    })
-
-  } catch (error) {
-    console.error('Login error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
-  }
 }
 
 // export async function POST(req: Request) {

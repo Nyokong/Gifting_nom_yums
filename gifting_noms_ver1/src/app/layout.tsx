@@ -1,6 +1,9 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
+import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import './globals.css';
+
+import Loading from '@/app/loading';
+import { SessionProvider } from 'next-auth/react';
 
 const geistSans = localFont({
     src: './fonts/ABCFavoritMono-Bold.woff2',
@@ -16,22 +19,22 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Gifiting Nom Yums",
-  description: "developed by callmekay",
+    title: 'Gifiting Nom Yums',
+    description: 'developed by callmekay',
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en">
+            <body
+                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            >
+                {children}
+            </body>
+        </html>
+    );
 }
