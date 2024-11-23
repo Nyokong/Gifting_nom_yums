@@ -8,7 +8,7 @@ const schema = z.object({
     name: z.string().min(5),
 });
 
-export async function create(prevState: any, formData: FormData) {
+export async function create(_prevState: any, formData: FormData) {
     const validatedFields = schema.safeParse({
         name: formData.get('name'),
     });
@@ -22,11 +22,12 @@ export async function create(prevState: any, formData: FormData) {
         try {
             console.log(validatedFields.data.name);
             const { name } = validatedFields.data;
-            const response = await api.post('/api/tests/post', {name});
+            const response = await api.post('/api/tests/post', { name });
 
             // console.log(response.data);
             // If the request succeeds, handle the response as needed
             // console.log('Client Side: ', response.data);
+            redirect('/admin/dashboard');
         } catch (error: any) {
             console.error(error);
             return {

@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import api from '@/app/_lib/axios';
 import { createSession } from '@/app/_lib/session';
-import { redirect } from 'next/dist/server/api-utils';
+import { redirect } from 'next/navigation';
 
 const loginSchema = z.object({
     email: z.string().email({ message: 'Invalid Email Address' }).trim(),
@@ -13,55 +13,56 @@ const loginSchema = z.object({
         .trim(),
 });
 
-export async function login(_prevState: any, formData: FormData) {
+export async function login(prevState: any, formData: FormData) {
     // 1. Validate fields
-    const validationResult = loginSchema.safeParse(
-        Object.fromEntries(formData),
-    );
+    const validatedFields = loginSchema.safeParse({
+        email: formData.get('email'),
+        password: formData.get('password'),
+    });
 
-    if (validationResult.error) {
-        console.log('Ok progress');
-    }
-
-    if (!validationResult.success) {
+    if (!validatedFields.success) {
         console.log(
             'show me some errors:',
-            validationResult.error.flatten().fieldErrors,
+            validatedFields.error.flatten().fieldErrors,
         );
         return {
-            errors: validationResult.error.flatten().fieldErrors,
+            errors: validatedFields.error.flatten().fieldErrors,
         };
-    }
+    } else {
+        // get the validated email and password
+        const { email, password } = validatedFields.data;
 
-    // get the validated email and password
-    const { email, password } = validationResult.data;
+        // an API call to verify the credentials
+        try {
+            const response = await api.post('/api/auth/login', {
+                email,
+                password,
+            });
 
-    // an API call to verify the credentials
-    try {
-        const response = await api.post('/api/auth/login', {
-            email,
-            password,
-        });
+            const data = response.data;
 
-        const data = response.data;
+            const id = data.user.id;
 
-        const id = data.user.id;
+            const session = await createSession(id);
 
-        await createSession(id);
+            if (session) {
+                redirect('/');
+            }
 
-        // redirect('/admin/dashboard');
-
-        return { user: data.user, redirect: true, errors: data.message };
-    } catch (error: any) {
-        if (error.response) {
-            console.error('Error response:', error.response.data);
-            console.error('Status code:', error.response.status);
-            return {
-                errors: {
-                    message: error.response.data,
-                    status: error.response.status,
-                },
-            };
+            // return { user: data.user, redirect: true, errors: data.message };
+        } catch (error: any) {
+            if (error.response) {
+                console.error(error);
+                return {
+                    message: error,
+                };
+                // return {
+                //     errors: {
+                //         message: error.response.data,
+                //         status: error.response.status,
+                //     },
+                // };
+            }
         }
     }
 }

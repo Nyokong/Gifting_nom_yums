@@ -9,19 +9,19 @@ import { middlwareVerification } from '@/app/_lib/session';
 export async function middleware(request: NextRequest) {
     const protectedRoutes = ['/admin/dashboard'];
 
-    // Check if the current request matches a protected route
-    if (
-        protectedRoutes.some(route =>
-            request.nextUrl.pathname.startsWith(route),
-        )
-    ) {
-        const session = await middlwareVerification();
+    // // Check if the current request matches a protected route
+    // if (
+    //     protectedRoutes.some(route =>
+    //         request.nextUrl.pathname.startsWith(route),
+    //     )
+    // ) {
+    //     const session = await middlwareVerification();
 
-        if (!session) {
-            // Redirect to login page if the session is invalid
-            return NextResponse.redirect(new URL('/auth/login', request.url));
-        }
-    }
+    //     if (!session) {
+    //         // Redirect to login page if the session is invalid
+    //         return NextResponse.redirect(new URL('/auth/login', request.url));
+    //     }
+    // }
 
     // Only protect /api/admin routes
     if (request.nextUrl.pathname.startsWith('/api/admin')) {

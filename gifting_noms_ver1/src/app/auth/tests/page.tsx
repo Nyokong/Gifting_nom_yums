@@ -28,24 +28,7 @@ export default function Page() {
 
     return (
         <div>
-            {/* <div>
-                {error && <div style={{ color: 'red' }}>{error}</div>}
-                <form onSubmit={onSubmit} className="div-col-container">
-                    <input
-                        className="hov-input "
-                        type="text"
-                        name="name"
-                        placeholder="Enter your name"
-                    />
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className="hov-button mt-3"
-                    >
-                        {isLoading ? <Loading /> : 'Submit'}
-                    </button>
-                </form>
-            </div> */}
+         
             <div className="mt-4 div-col-container">
                 {error && (
                     <div className="alert-tab" style={{ color: 'blue' }}>

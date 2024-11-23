@@ -60,6 +60,7 @@ export async function createSession(userId: string) {
                     expires: expiresAt,
                 },
             });
+
             return admin;
         } catch (error) {
             console.error('Error creating admin:', error);
