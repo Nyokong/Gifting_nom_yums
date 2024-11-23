@@ -1,9 +1,11 @@
+import { Role } from '@prisma/client';
 import 'server-only';
 import { JWTPayload, SignJWT, jwtVerify } from 'jose';
 
 import { prisma } from '@/app/_lib/prisma';
 
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 const key = new TextEncoder().encode(process.env.SECRET);
 
@@ -66,13 +68,40 @@ export async function createSession(userId: string) {
     }
 }
 
-// export async function verifySession(){
-//   const cookie = (await cookies()).get(cookie.name)?.value;
-//   const session = await decrypt(cookie);
+export async function verifySession() {
+    const sessionCookie = await cookies();
+    const token = sessionCookie.get('session');
+    if (token) {
+        const session = await decrypt(token.value);
 
-//   if(!session?.userId){
-//     redirect('/login');
-//   }
+        console.log('user is logged in');
 
-//   return {userId: session.userId }
-// }
+        if (!session?.userId) {
+            redirect('/auth/login');
+        }
+
+        return { userId: session.userId };
+    } else {
+        console.error('Cookie value is undefined');
+    }
+}
+
+export async function middlwareVerification() {
+    const sessionCookie = await cookies();
+    const token = sessionCookie.get('session');
+    console.log('from session page');
+
+    if (!token) {
+        console.error('Cookie value is undefined');
+        return null;
+    }
+
+    const session = await decrypt(token.value);
+
+    if (!session?.userId) {
+        console.error('Invalid or expired session');
+        return null;
+    }
+
+    return { userId: session.userId, role: session.Role };
+}

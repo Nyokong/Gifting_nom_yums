@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import api from '@/app/_lib/axios';
 import { createSession } from '@/app/_lib/session';
+import { redirect } from 'next/dist/server/api-utils';
 
 const loginSchema = z.object({
     email: z.string().email({ message: 'Invalid Email Address' }).trim(),
@@ -47,6 +48,8 @@ export async function login(_prevState: any, formData: FormData) {
         const id = data.user.id;
 
         await createSession(id);
+
+        // redirect('/admin/dashboard');
 
         return { user: data.user, redirect: true, errors: data.message };
     } catch (error: any) {
