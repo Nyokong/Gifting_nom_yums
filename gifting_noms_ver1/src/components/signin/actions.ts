@@ -13,7 +13,7 @@ const loginSchema = z.object({
         .trim(),
 });
 
-export async function login(prevState: any, formData: FormData) {
+export async function login(_prevState: any, formData: FormData) {
     // 1. Validate fields
     const validatedFields = loginSchema.safeParse({
         email: formData.get('email'),
@@ -39,31 +39,29 @@ export async function login(prevState: any, formData: FormData) {
                 password,
             });
 
-            const data = response.data;
+            // const id = response.data.user.id;
 
-            const id = data.user.id;
-
-            const session = await createSession(id);
-
-            if (session) {
-                redirect('/');
-            }
+            // if (id) {
+            //     await createSession(id);
+            // }
 
             // return { user: data.user, redirect: true, errors: data.message };
         } catch (error: any) {
             if (error.response) {
-                console.error(error);
-                return {
-                    message: error,
-                };
-                // return {
-                //     errors: {
-                //         message: error.response.data,
-                //         status: error.response.status,
-                //     },
-                // };
+                // Server responded with a status other than 2xx
+                console.error('API Error Response:', error.response.data);
+                return error;
+            } else if (error.request) {
+                // Request was made but no response received
+                console.error('API Error Request:', error.request);
+                return error;
+            } else {
+                // Something else happened
+                console.error('Unexpected Error:', error.message);
+                return error;
             }
         }
+        redirect('/');
     }
 }
 

@@ -27,13 +27,23 @@ export async function create(_prevState: any, formData: FormData) {
             // console.log(response.data);
             // If the request succeeds, handle the response as needed
             // console.log('Client Side: ', response.data);
-            redirect('/admin/dashboard');
         } catch (error: any) {
-            console.error(error);
-            return {
-                message: error,
-            };
+            if (error.response) {
+                // Server responded with a status other than 2xx
+                console.error('API Error Response:', error.response.data);
+                return error;
+            } else if (error.request) {
+                // Request was made but no response received
+                console.error('API Error Request:', error.request);
+                return error;
+            } else {
+                // Something else happened
+                console.error('Unexpected Error:', error.message);
+                return error;
+            }
+
+            // throw error;
         }
+        redirect('/');
     }
-    // redirect('/');
 }
