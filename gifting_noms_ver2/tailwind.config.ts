@@ -13,6 +13,9 @@ export default {
             padding: '0px',
         },
         extend: {
+            gridColumn: {
+                'span-16': 'span 16 / span 16',
+            },
             colors: {
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',

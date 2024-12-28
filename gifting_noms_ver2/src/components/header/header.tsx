@@ -12,7 +12,7 @@ import { Search, ShoppingCart } from 'lucide-react';
 
 export default function header() {
     return (
-        <div className="w-full h-[120px] flex flex-col items-center">
+        <div className="w-full h-[120px] flex flex-col items-center justify-center">
             <div className="bg-primary text-white w-full h-[30px] text-[10px] flex flex-row justify-center items-center">
                 <p>for detailed sites text this whatsapp number </p>
                 <Link
