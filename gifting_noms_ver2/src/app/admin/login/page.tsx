@@ -36,9 +36,7 @@ export default function LoginPage() {
                             {errors}
                         </div>
                     )}
-                    {state?.errors?.email && (
-                        <p className="mt-3 ">{state?.errors?.email}</p>
-                    )}
+                    {state.message && <p>{state.message}</p>}
                     <Input
                         name="email"
                         type="email"
@@ -46,9 +44,7 @@ export default function LoginPage() {
                         className="m-2 hov-input"
                     />
 
-                    {state?.errors?.password && (
-                        <p className="mt-3 ">{state?.errors?.password}</p>
-                    )}
+                    {state.message && <p>{state.message}</p>}
                     <Input
                         name="password"
                         type="password"

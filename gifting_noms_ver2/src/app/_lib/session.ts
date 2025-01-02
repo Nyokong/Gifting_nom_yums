@@ -1,4 +1,4 @@
-import 'server-only';
+'use server';
 
 import { Role } from '@prisma/client';
 import { JWTPayload, SignJWT, jwtVerify } from 'jose';
@@ -40,19 +40,45 @@ export async function createSession(userId: string) {
     const expiresAt = new Date(Date.now() + 1 * 24 * 60 * 60 * 1000);
     const sessionToken = await encrypt({ userId, expiresAt });
 
+    console.log(userId);
+
     const sessionCookie = await cookies();
 
     if (sessionToken) {
-        console.log('session has been created!');
+        // creating the session database entry
+        // sessionCookie.set('sessionid', sessionToken, {
+        //     // secure: true,
+        //     httpOnly: true,
+        //     domain: process.env.DOMAIN,
+        //     maxAge: 60 * 60 * 1,
+        // });
+
         sessionCookie.set({
-            name: 'session',
-            value: sessionToken,
+            name: 'sessionid',
+            value: 'lee',
             httpOnly: true,
-            secure: true,
-            maxAge: 60 * 60 * 1,
+            secure: process.env.NODE_ENV !== 'development',
+            path: '/',
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 24 * 7,
         });
 
-        // creating the session database entry
+        // await setCookie(
+        //     'myCookie',
+        //     'cookieValue',
+        //     {
+        //         httpOnly: true,
+        //         secure: process.env.NODE_ENV !== 'development',
+        //         maxAge: 60 * 60 * 24 * 7,
+        //         sameSite: 'strict',
+        //         path: '/',
+        //     },
+        //     { cookies },
+        // );
+
+        if (sessionCookie.get('sessionid')) {
+            console.log('session has been created! fucking guy\n');
+        }
         try {
             const admin = await prisma.session.create({
                 data: {
