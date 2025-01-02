@@ -8,12 +8,12 @@ import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Search, ShoppingCart } from 'lucide-react';
+import { AlignJustify, Search, ShoppingCart } from 'lucide-react';
 
 export default function header() {
     return (
         <div className="w-full h-[120px] flex flex-col items-center justify-center">
-            <div className="bg-primary text-white w-full h-[30px] text-[10px] flex flex-row justify-center items-center">
+            <div className="bg-primary text-white w-full h-[30px] text-[10px] flex flex-row justify-center items-center fixed top-0">
                 <p>for detailed sites text this whatsapp number </p>
                 <Link
                     href="tel:+2348100000000"
@@ -23,12 +23,14 @@ export default function header() {
                 </Link>
             </div>
             <div className="w-full flex flex-row items-center h-[auto]  px-4">
-                <Link href="/" className="text-2xl">
+                <Link href="/" className="text-1xl w-[100px] ">
                     Gifiting-Nom-Yums
                 </Link>
 
                 {/* For mobile devices */}
-                <div className="md:hidden flex">Mobile</div>
+                <div className="md:hidden flex justify-end w-full">
+                    <AlignJustify />
+                </div>
 
                 {/* for desktop */}
                 <div className=" w-[auto] h-[100px] hidden md:flex flex-row items-center">
@@ -56,6 +58,7 @@ export default function header() {
                     </div>
                 </div>
             </div>
+            <div className="h-[20px] w-full bg-black">bottom header</div>
         </div>
     );
 }

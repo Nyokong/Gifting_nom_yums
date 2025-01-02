@@ -1,29 +1,70 @@
 'use client';
-import { Button } from '@/components/ui/button';
 
-import axios from 'axios';
+import { useActionState, useEffect, useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { useRouter } from 'next/navigation';
+// import api from '@/app/_lib/axios';
 
-import React from 'react';
+import { login } from './actions';
+import Loading from '@/app/loading';
 
-export default function page() {
+const initialState = {
+    message: '',
+};
+
+export default function LoginPage() {
+    const [state, formAction, isPending] = useActionState(login, initialState);
+
+    const [errors, setErrors] = useState<string | null>(null);
+
+    const router = useRouter();
+
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+        setErrors(null); // Clear previous errors when a new request starts
+    }, []);
+
     return (
-        <div className="container flex justify-center items-center mt-5 ">
-            <div className="h-[auto] w-[500px] bg-slate-800 rounded-sm flex justify-center items-center gap-3 flex-col p-5">
-                <label htmlFor="" className="text-white text-2xl">
-                    Enter your pass-code
-                </label>
-                <input
-                    type="text"
-                    name="code"
-                    placeholder="Enter your pin/code"
-                    className="h-10 w-[270px] rounded-md px-3"
-                    autoComplete="none"
-                />
+        <>
+            <div className="flex flex-col items-center gap-3 ">
+                <form action={formAction} className="">
+                    <h1 className="">Login</h1>
+                    {errors && (
+                        <div className="" style={{ color: 'blue' }}>
+                            {errors}
+                        </div>
+                    )}
+                    {state?.errors?.email && (
+                        <p className="mt-3 ">{state?.errors?.email}</p>
+                    )}
+                    <Input
+                        name="email"
+                        type="email"
+                        placeholder="Enter your email"
+                        className="m-2 hov-input"
+                    />
 
-                <Button className="text-white w-[100px] h-[40px] rounded-lg">
-                    Next
-                </Button>
+                    {state?.errors?.password && (
+                        <p className="mt-3 ">{state?.errors?.password}</p>
+                    )}
+                    <Input
+                        name="password"
+                        type="password"
+                        placeholder="Enter your password"
+                        className="m-2 "
+                    />
+
+                    <button
+                        className="hov-button"
+                        type="submit"
+                        disabled={isPending}
+                    >
+                        {isPending ? <Loading /> : 'Sign In'}
+                    </button>
+                </form>
             </div>
-        </div>
+        </>
     );
 }

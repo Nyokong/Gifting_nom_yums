@@ -15,10 +15,7 @@ const initialState = {
 export default function SigninForm() {
     const [state, formAction, isPending] = useActionState(login, initialState);
 
-    // const [email, setEmail] = useState('');
-    // const [password, setPassword] = useState('');
     const [errors, setErrors] = useState<string | null>(null);
-    // const [pending, setPending] = useState(false);
 
     const router = useRouter();
 
